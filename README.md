@@ -1,4 +1,5 @@
 # Downloadr
+[![Build Status](https://secure.travis-ci.org/claudijd/downloadr.png)](http://travis-ci.org/claudijd/downloadr)
 
 A simple gem to make downloading files in a Ruby application simple without needing to roll your own downloader implementation.
 
