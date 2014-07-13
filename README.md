@@ -18,8 +18,8 @@ Or install it yourself as:
 
 ## Usage
 
-require 'downloadr'
-Downloadr::HTTP.download("http://www.google.com/index.html", "index.html")
+		require 'downloadr'
+		Downloadr::HTTP.download("http://www.google.com/index.html", "index.html")
 
 ## Contributing
 
