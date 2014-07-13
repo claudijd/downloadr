@@ -14,12 +14,7 @@ module Downloadr
   	end
 
   	def download
-  	  File.write(
-  	  	@path,
-  	  	Net::HTTP.get(
-  	  	  URI.parse(@uri)
-  	  	)
-  	  )
+			File.write(@path, Net::HTTP.get(URI.parse(@uri)))
   	end
 
   	def self.download(uri, path)
