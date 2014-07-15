@@ -42,6 +42,21 @@ module Downloader
       end
     end
 
+    context "when initializing Downloadr::HTTP w/o a download path or uri filename" do
+      before :each do
+        @uri = "http://www.google.com"
+      end
+
+      subject{@http_downloadr}
+
+      it "should have the right uri" do
+        expect {
+          Downloadr::HTTP.new(@uri) 
+        }.to raise_error(Downloadr::UnknownDownloadPath)
+      end
+    end
+
+
   	context "when downloading a file via HTTP" do
   		before :each do
 				@download_path = Tempfile.new('downloadr')
