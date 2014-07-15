@@ -20,7 +20,7 @@ Or install it yourself as:
 ## Usage
 
 		require 'downloadr'
-		Downloadr::HTTP.download("http://www.google.com/index.html", "index.html")
+		Downloadr::HTTP.download("https://www.openssl.org/source/openssl-1.0.1h.tar.gz")
 
 ## Contributing
 
