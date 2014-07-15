@@ -59,8 +59,8 @@ desc "Tag the release"
 task :tag do
   require 'downloadr/version.rb'
   puts "[+] Tagging Downloadr version #{Downloadr::VERSION}"  
-  `git tag #{Downloadr::VERSION}`
-  `git push --tags`
+  puts `git tag #{Downloadr::VERSION}`
+  puts `git push --tags`
 end
 
 desc "Perform an end-to-end release of the gem"
