@@ -39,7 +39,6 @@ def bump_minor_version
 end
 
 bump_minor_version
-
 exit
 
 desc "Build the gem"
