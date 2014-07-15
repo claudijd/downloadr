@@ -66,7 +66,6 @@ task :release do
   bump_minor_version()
 
   require 'downloadr/version.rb'
-
   Rake::Task[:build].execute
   Rake::Task[:tag].execute
   Rake::Task[:publish].execute
