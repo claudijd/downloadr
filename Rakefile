@@ -7,6 +7,7 @@ require 'rspec/core'
 require 'rspec/core/rake_task'
 
 $:.unshift File.join(File.dirname(__FILE__), "lib")
+require 'downloadr/version'
 
 task :default => :spec
 
@@ -32,9 +33,11 @@ def bump_minor_version
     f.puts "end"
   end
 
-  puts "[+] Bumping Downloadr version #{new_version}"
+  require 'downloadr/version'
+
+  puts "[+] Bumping Downloadr version #{Downloadr::VERSION}"
   puts `git add lib/downloadr/version.rb`
-  puts `git commit -a -m "Bumped Gem version to #{new_version}"`
+  puts `git commit -a -m "Bumped Gem version to #{Downloadr::VERSION}"`
   puts `git push origin master`
 end
 
@@ -64,8 +67,6 @@ desc "Perform an end-to-end release of the gem"
 task :release do
   clean_up() # Clean up before we start
   bump_minor_version()
-
-  require 'downloadr/version.rb'
   Rake::Task[:build].execute
   Rake::Task[:tag].execute
   Rake::Task[:publish].execute
