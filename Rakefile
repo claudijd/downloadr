@@ -38,6 +38,10 @@ def bump_minor_version
   puts `git push origin master`
 end
 
+bump_minor_version
+
+exit
+
 desc "Build the gem"
 task :build do
   require 'downloadr/version.rb'
