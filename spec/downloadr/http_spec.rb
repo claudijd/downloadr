@@ -12,7 +12,7 @@ module Downloader
 
   		subject{@http_downloadr}
 
-  		it { should be_kind_of Downloadr::HTTP}
+  		it {should be_kind_of Downloadr::HTTP}
 
   		it "should have the right uri" do
   			expect(subject.uri).to eql(::Addressable::URI.parse(@uri))
@@ -22,6 +22,25 @@ module Downloader
   			expect(subject.path).to be(@download_path)
   		end
   	end
+
+    context "when initializing Downloadr::HTTP w/o a download path" do
+      before :each do
+        @uri = "http://www.google.com/index.html"
+        @http_downloadr = Downloadr::HTTP.new(@uri)
+      end
+
+      subject{@http_downloadr}
+
+      it {should be_kind_of Downloadr::HTTP}
+
+      it "should have the right uri" do
+        expect(subject.uri).to eql(::Addressable::URI.parse(@uri))
+      end
+
+      it "should have the right file path" do
+        expect(subject.path).to eql("index.html")
+      end
+    end
 
   	context "when downloading a file via HTTP" do
   		before :each do
@@ -75,5 +94,54 @@ module Downloader
   			expect(File.read(@download_path)).to include("google")
   		end
   	end
+
+    context "when attempting to download from a uri that returns a 404" do
+      before :each do
+        @download_path = Tempfile.new('downloadr')
+        @uri = "http://www.google.com/this_file_does_not_exist"
+      end
+
+      it "should start with an empty file" do
+        expect(@download_path.size).to be(0)
+      end
+
+      it "should throw an exception when attempting to download" do
+        expect {
+          Downloadr::HTTP.download(@uri, @download_path)
+        }.to raise_error(Downloadr::ResourceNotFound)
+      end
+
+      it "should not have created a file on disk" do
+        expect {
+          Downloadr::HTTP.download(@uri, @download_path)
+        }.to raise_error(Downloadr::ResourceNotFound)
+        expect(@download_path.size).to be(0)
+      end
+    end
+
+    context "when attempting to download from a uri that doesn't resolve" do
+      before :each do
+        @download_path = Tempfile.new('downloadr')
+        @uri = "http://abc.local/this_server_does_not_exist"
+      end
+
+      it "should start with an empty file" do
+        expect(@download_path.size).to be(0)
+      end
+
+      it "should throw an exception when attempting to download" do
+        expect {
+          Downloadr::HTTP.download(@uri, @download_path)
+        }.to raise_error(Downloadr::SocketError)
+      end
+
+      it "should not have created a file on disk" do
+        expect {
+          Downloadr::HTTP.download(@uri, @download_path)
+        }.to raise_error(Downloadr::SocketError)
+        expect(@download_path.size).to be(0)
+      end
+    end    
+
   end
 end
