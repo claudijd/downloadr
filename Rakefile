@@ -19,7 +19,6 @@ def clean_up
 end
 
 require 'downloadr/version'
-VERSION = Downloadr::VERSION
 
 desc "Bump the Gemspec Version"
 task :bump do
@@ -28,36 +27,36 @@ task :bump do
   version_prefix = version_string_match[1]
   existing_patch_version = version_string_match[2]
   new_patch_version = (existing_patch_version.to_i + 1).to_s
-  VERSION = version_prefix + new_patch_version
+  new_version = version_prefix + new_patch_version
 
   File.open('lib/downloadr/version.rb', 'w') do |f|
     f.puts "module Downloadr\n"
-    f.puts "  VERSION='#{VERSION}'\n"
+    f.puts "  VERSION='#{new_version}'\n"
     f.puts "end"
   end
 
-  puts "[+] Bumping Downloadr version #{VERSION}"
+  puts "[+] Bumping Downloadr version #{new_version}"
   puts `git add lib/downloadr/version.rb`
-  puts `git commit -a -m "Bumped Gem version to #{VERSION}"`
+  puts `git commit -a -m "Bumped Gem version to #{new_version}"`
   puts `git push origin master`
 end
 
 desc "Build the gem"
 task :build do
-  puts "[+] Building Downloadr version #{VERSION}"
+  puts "[+] Building Downloadr version #{Downloadr::VERSION}"
   puts `gem build downloadr.gemspec`
 end
 
 desc "Publish the gem"
 task :publish do
-  puts "[+] Publishing Downloadr version #{VERSION}"  
+  puts "[+] Publishing Downloadr version #{Downloadr::VERSION}"  
   Dir.glob("*.gem").each { |f| puts `gem push #{f}`} 
 end
 
 desc "Tag the release"
 task :tag do
-  puts "[+] Tagging Downloadr version #{VERSION}"  
-  `git tag #{VERSION}`
+  puts "[+] Tagging Downloadr version #{Downloadr::VERSION}"  
+  `git tag #{Downloadr::VERSION}`
   `git push --tags`
 end
 
