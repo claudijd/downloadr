@@ -1,24 +1,32 @@
-require "net/http"
-require "uri"
+require 'rest_client'
+require 'addressable/uri'
+
+# HTTP/HTTPS Transport handler for downloading a file
 
 module Downloadr
-  # HTTP/HTTPS Transport handler for downloading a file
   class HTTP
     attr_reader :uri, :path
 
     # @param [String] uri
-    # @param [String] path
-    def initialize(uri, path)
-      @uri = uri
-      @path = path
+    # @param [String] download_path
+    def initialize(uri, download_path)
+      @uri = ::Addressable::URI.parse(uri)
+      @path = download_path
     end
 
-    def download
-      File.write(@path, Net::HTTP.get(URI.parse(@uri)))
+    def download(opts = {})
+      response = ::RestClient::Request.execute(
+                   :method => :get,
+                   :url => @uri.to_s,
+                   :timeout => 10,
+                   :open_timeout => 10
+                 )
+
+      File.write(@path, response.to_str)
     end
 
-    def self.download(uri, path)
-      downloader = Downloadr::HTTP.new(uri, path)
+    def self.download(uri, download_path)
+      downloader = Downloadr::HTTP.new(uri, download_path)
       downloader.download
     end
   end
