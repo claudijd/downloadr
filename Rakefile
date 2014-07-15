@@ -19,7 +19,8 @@ def clean_up
   Dir.glob("*.lock").each { |f| File.unlink(f) }  
 end
 
-def bump_minor_version
+desc "Build the gem"
+task :bump do
   version_string_match = File.read('lib/downloadr/version.rb').match(/VERSION='(\d+\.\d+\.)(\d+)'/)
 
   version_prefix = version_string_match[1]
@@ -66,7 +67,7 @@ end
 desc "Perform an end-to-end release of the gem"
 task :release do
   clean_up() # Clean up before we start
-  bump_minor_version()
+  Rake::Task[:bump].execute
   Rake::Task[:build].execute
   Rake::Task[:tag].execute
   Rake::Task[:publish].execute
