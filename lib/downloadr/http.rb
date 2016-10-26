@@ -29,7 +29,7 @@ module Downloadr
         raise Downloadr::ResourceNotFound
       end
 
-      File.write(@path, response.to_str)
+      File.binwrite(@path, response)
     end
 
     def self.download(uri, download_path = nil)
